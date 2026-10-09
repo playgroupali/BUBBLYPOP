@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Cyber Pop</title>
+    <title>Bubbly Pop</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon.png">
     <style>
-        /* Custom Automated Light/Dark Theme Variable Matrix Framework */
         :root {
-            --bg-body: #050505; /* Solid Dark Mode Black */
+            --bg-body: #050505;
             --bg-arena: #0c0c0e;
             --border-ui: #1c1c22;
             --text-main: #FFFFFF;
             --text-muted: #A3A3A3;
             --overlay-bg: rgba(5, 5, 5, 0.88);
-            --bubble-glow: rgba(59, 130, 246, 0.6); /* Blue Tint on all modes */
+            --bubble-glow: rgba(59, 130, 246, 0.6);
             --bubble-stroke: #60a5fa;
             --btn-bg: #FFFFFF;
             --btn-text: #050505;
@@ -23,13 +22,13 @@
 
         @media (prefers-color-scheme: light) {
             :root {
-                --bg-body: #D9D2C9; /* Premium Soft Light Brownish BG */
+                --bg-body: #D9D2C9;
                 --bg-arena: #E5DDD3; 
                 --border-ui: #C7BEB3;
-                --text-main: #2D2722; /* Deep Earth Brown Font */
+                --text-main: #2D2722;
                 --text-muted: #6B6158;
                 --overlay-bg: rgba(217, 210, 201, 0.94);
-                --bubble-glow: rgba(37, 99, 235, 0.5); /* Blue Tint remains locked */
+                --bubble-glow: rgba(37, 99, 235, 0.5);
                 --bubble-stroke: #2563eb;
                 --btn-bg: #2D2722;
                 --btn-text: #FFFFFF;
@@ -37,32 +36,18 @@
         }
 
         body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            font-family: system-ui, -apple-system, sans-serif;
-            margin: 0; padding: 0; overflow: hidden;
-            width: 100vw; height: 100vh;
-            display: flex; justify-content: center; align-items: center;
-            box-sizing: border-box; user-select: none;
-            -webkit-user-select: none; touch-action: none;
+            background-color: var(--bg-body); color: var(--text-main);
+            font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 0; overflow: hidden;
+            width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center;
+            box-sizing: border-box; user-select: none; -webkit-user-select: none; touch-action: none;
             transition: background-color 0.3s, color 0.3s;
         }
 
-        .game-wrapper {
-            display: flex; flex-direction: column; align-items: center;
-            width: 100%; height: 100%; padding: 10px 15px 45px 15px; box-sizing: border-box;
-        }
-
-        .scoreboard {
-            width: 100%; max-width: 500px; display: flex;
-            justify-content: space-between; margin-bottom: 12px;
-            padding: 0 10px; box-sizing: border-box; z-index: 10;
-        }
-
+        .game-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%; padding: 10px 15px 45px 15px; box-sizing: border-box; }
+        .scoreboard { width: 100%; max-width: 500px; display: flex; justify-content: space-between; margin-bottom: 12px; padding: 0 10px; box-sizing: border-box; z-index: 10; }
         .score-box { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
         .score-val { color: var(--text-main); font-variant-numeric: tabular-nums; font-size: 16px; margin-left: 4px; }
         #highScoreVal { text-shadow: 0 0 8px var(--bubble-glow); }
-
         .canvas-container { position: relative; width: 100%; flex: 1; background-color: var(--bg-arena); overflow: hidden; border-radius: 20px; }
         canvas { display: block; width: 100%; height: 100%; }
         .menu-overlay {
@@ -98,7 +83,8 @@
         <div class="canvas-container" id="arenaBox">
             <canvas id="gameCanvas"></canvas>
             <div class="menu-overlay" id="menuOverlay">
-                <h1 id="menuTitle">CYBER POP</h1>
+                <!-- UPDATED: Re-mapped standalone branding variables strings -->
+                <h1 id="menuTitle">BUBBLY POP</h1>
                 <p class="desc-text" id="menuDesc">Tap and burst the floating blue bubbles before they escape the grid horizon!</p>
                 <button class="action-btn" id="startBtn" onclick="initiateGameSession()">Launch Grid</button>
             </div>
@@ -128,18 +114,17 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             dynamicallyScaleGameCanvas();
-            const savedRecord = localStorage.getItem('hs_cyber_pop');
+            const savedRecord = localStorage.getItem('hs_bubbly_pop_iso');
             if (savedRecord) { highScore = parseInt(savedRecord, 10); highDisplay.innerText = highScore; }
         });
 
-        // Tap/Touch Position Scanner Input Vectors
         window.addEventListener('touchstart', handleInputTap);
         window.addEventListener('mousedown', handleInputTap);
         function handleInputTap(e) {
             if (gameState !== "PLAYING") return;
             const rect = canvas.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const clientX = e.touches ? e.touches.clientX : e.clientX;
+            const clientY = e.touches ? e.touches.clientY : e.clientY;
             
             const wScale = (canvas.width / window.devicePixelRatio) / rect.width;
             const hScale = (canvas.height / window.devicePixelRatio) / rect.height;
@@ -152,7 +137,6 @@
                 const distX = tapX - b.x; const distY = tapY - b.y;
                 const distance = Math.sqrt(distX * distX + distY * distY);
 
-                // Check overlay boundaries (with slight visual touch padding)
                 if (distance <= b.radius + 8) {
                     createPopBurstParticles(b.x, b.y, b.colorStroke);
                     bubbles.splice(i, 1);
@@ -167,10 +151,8 @@
             for (let i = 0; i < 8; i++) {
                 particles.push({
                     x: x, y: y,
-                    vx: (Math.random() - 0.5) * 5,
-                    vy: (Math.random() - 0.5) * 5,
-                    radius: Math.random() * 3 + 1,
-                    alpha: 1, color: color
+                    vx: (Math.random() - 0.5) * 5, vy: (Math.random() - 0.5) * 5,
+                    radius: Math.random() * 3 + 1, alpha: 1, color: color
                 });
             }
         }
@@ -186,9 +168,9 @@
 
         function triggerGameOverSequence() {
             gameState = "GAMEOVER"; cancelAnimationFrame(animationFrameId);
-            if (score > highScore) { highScore = score; highDisplay.innerText = highScore; localStorage.setItem('hs_cyber_pop', highScore.toString()); }
+            if (score > highScore) { highScore = score; highDisplay.innerText = highScore; localStorage.setItem('hs_bubbly_pop_iso', highScore.toString()); }
             menuTitle.innerText = "GRID CONCLUDED"; menuTitle.style.background = "linear-gradient(135deg, #3B82F6, #1D4ED8)"; menuTitle.style.webkitBackgroundClip = "text";
-            menuDesc.innerText = `You missed too many orbs!\nFinal Score: ${score}`; startBtn.innerText = "Pop Again"; overlay.style.display = 'flex';
+            menuDesc.innerText = `Final Score: ${score}`; startBtn.innerText = "Pop Again"; overlay.style.display = 'flex';
         }
 
         function gameLoopEngineTick() {
@@ -202,7 +184,6 @@
 
             ctx.fillStyle = styles.getPropertyValue('--bg-arena').trim(); ctx.fillRect(0, 0, w, h);
 
-            // Spawn dynamic bubble floating vectors
             if (frameCounter % spawnRate === 0) {
                 const bRadius = Math.random() * 15 + 16;
                 bubbles.push({
@@ -212,32 +193,24 @@
                 });
             }
 
-            // Render Blue Translucent Bubbles Map loops
             for (let i = bubbles.length - 1; i >= 0; i--) {
                 let b = bubbles[i]; b.y -= b.speed;
-
                 ctx.save();
                 ctx.shadowBlur = 10; ctx.shadowColor = b.colorStroke;
                 ctx.fillStyle = b.colorGlow; ctx.strokeStyle = b.colorStroke; ctx.lineWidth = 2;
-                
                 ctx.beginPath(); ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-                
-                // Translucent Inner Shimmer Sheen Highlights Arc
                 ctx.fillStyle = "rgba(255, 255, 255, 0.25)"; ctx.beginPath();
                 ctx.arc(b.x - b.radius * 0.3, b.y - b.radius * 0.3, b.radius * 0.2, 0, Math.PI * 2); ctx.fill();
                 ctx.restore();
-
                 if (b.y + b.radius < 0) { triggerGameOverSequence(); return; }
             }
 
-            // Draw Particle Splash Bursts
             for (let i = particles.length - 1; i >= 0; i--) {
                 let p = particles[i]; p.x += p.vx; p.y += p.vy; p.alpha -= 0.03;
                 if (p.alpha <= 0) { particles.splice(i, 1); continue; }
                 ctx.save(); ctx.globalAlpha = p.alpha; ctx.fillStyle = p.color;
                 ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill(); ctx.restore();
             }
-
             animationFrameId = requestAnimationFrame(gameLoopEngineTick);
         }
     </script>
